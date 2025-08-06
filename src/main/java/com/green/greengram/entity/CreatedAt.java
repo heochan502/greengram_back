@@ -19,6 +19,6 @@ import java.time.LocalDateTime;
 public class CreatedAt {
     @CreatedDate // 현재값 생성해서 넣는다 // 인서트 일때만
     @Column(nullable = false) //NOT NULL 줄때 사용  // 상속 받으면 아래의 컬럼을 만들게 하는 것
-    private LocalDateTime created; // 공통적인 컬럼을 넣기위해서 이짓을 하는중임
+    private LocalDateTime createdAt; // 공통적인 컬럼을 넣기위해서 이짓을 하는중임
 
 }
