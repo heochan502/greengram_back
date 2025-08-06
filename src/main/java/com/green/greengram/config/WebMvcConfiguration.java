@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -53,6 +56,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .allowCredentials(true);
 
+    }
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        //RestController 애노테이션이 있는 컨트롤러의 주소앞에 /api를 붙여준다
+        configurer.addPathPrefix("api", HandlerTypePredicate.forAnnotation(RestController.class));
     }
 
 }
