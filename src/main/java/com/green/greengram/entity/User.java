@@ -15,13 +15,14 @@ import java.util.List;
 @Setter
 @Entity
 @EqualsAndHashCode
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames = {"uid"}
-                )
-        }
-)
+//@Table(
+//        uniqueConstraints = {
+//                @UniqueConstraint(
+//                        columnNames = {"uid"}
+//                )
+//        }
+//)
+// 위는 복합적으로 줄 때 쓰면 댐
 
 public class User extends UpdatedAt {
     @Id
@@ -29,9 +30,9 @@ public class User extends UpdatedAt {
     private Long userId;
 
     @Column(nullable = true, length = 30)
-    private String userName;
+    private String nickName;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50, unique = true)
     private String uid;
 
     @Column(nullable = false, length = 100)
