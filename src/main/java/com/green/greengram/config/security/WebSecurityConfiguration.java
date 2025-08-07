@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -15,6 +17,8 @@ import java.util.Collections;
 /*
 @Configuration - bean 등록, Bean 메소드가 있다.
 Bean 메소드는 무조건 싱글톤으로 처리된다.
+싱글톤 - 여기저기서 데이터 달라해도 하나의 주소값으로 날아간다 ?
+@bean 이 붙으면 @configuration 이 붙어야한다
  */
 @Configuration
 @RequiredArgsConstructor
@@ -59,6 +63,8 @@ public class WebSecurityConfiguration {
         };
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {return new BCryptPasswordEncoder();}
 
 
 

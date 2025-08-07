@@ -24,6 +24,7 @@ public class UserController {
 
         log.info("req : {}", req);
         log.info("pic : {}", pic!= null? pic.getOriginalFilename() : pic);
+        userService.signup(req,pic);
         return new ResultResponse<Integer>("",1);
     }
 
