@@ -1,6 +1,8 @@
 constants:
   file:
     upload-directory: D:\hc\upload\greengram
+    feed-pic: /feed
+    profile-pic: /profile
 
   jwt:
     issuer: green502@green.com #??? ??
