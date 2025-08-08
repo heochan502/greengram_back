@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -38,5 +40,23 @@ public class ImgUploadManager {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "프로파일 이미지 저장에 실패하였습니다.");
         }
         return randomFileName;
+    }
+
+    public List<String> saveFeedPics (Long feedId, List<MultipartFile> pics) {
+        //폴더 생성
+        String directory = String.format("%s/%s/%d", constFile.getUploadDirectory(), constFile.getFeedPic(), feedId);
+        myFileUtils.makeFolders(directory);
+        List<String> randomFileNames = new ArrayList<>(pics.size());
+        for (MultipartFile pic : pics) {
+            String randomFileName = myFileUtils.makeRandomFileName(pic); // 랜덤파일명 이름 생성
+            randomFileNames.add(randomFileName); // 리턴할 randomFileName에 이름 추가
+            String savePath = directory + "/" + randomFileName;
+            try {
+                myFileUtils.transferTo(pic, savePath);
+            } catch (IOException e) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "피드 이미지 저장에 실패하였습니다.");
+            }
+        }
+        return randomFileNames;
     }
 }

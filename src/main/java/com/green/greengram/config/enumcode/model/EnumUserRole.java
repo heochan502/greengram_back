@@ -8,9 +8,11 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Converter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @RequiredArgsConstructor
+@ToString
 // 구조면서 객체화 까지 가지고 있다
 // 하나하나 이넘안에 있는 변수들은 값을 가질 수가 있다.
 
