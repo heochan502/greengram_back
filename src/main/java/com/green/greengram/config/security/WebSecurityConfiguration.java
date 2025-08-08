@@ -46,9 +46,6 @@ public class WebSecurityConfiguration {
                    .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                    .exceptionHandling(e -> e.authenticationEntryPoint(tokenAuthenticationEntryPoint))
                    .build();
-
-
-
     }
 
     // ⭐️ CORS 설정

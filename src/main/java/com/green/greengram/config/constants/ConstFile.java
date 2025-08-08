@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @RequiredArgsConstructor
 @ToString
 public class ConstFile {
+    //yaml 파일 확인
     private final String uploadDirectory;
     private final String feedPic;
     private final String profilePic;

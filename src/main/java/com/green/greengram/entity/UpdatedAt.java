@@ -1,6 +1,7 @@
 package com.green.greengram.entity;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 // 모든 테이블에 createdAt이 있으니까 얘를 상속받으면 해당 컬럼을 다 만들 수가 있으니 아래는 현재일시값을 넣는 작업
 public class UpdatedAt extends CreatedAt {
     @LastModifiedDate// 수정된 날짜 입력 되게
+//    @Column(nullable = false)
     private LocalDateTime updatedAt;
 
 }

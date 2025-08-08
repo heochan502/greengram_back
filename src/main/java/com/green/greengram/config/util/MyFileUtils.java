@@ -24,8 +24,8 @@ public class MyFileUtils {
 
     //파일명에서 확장자 추출 (. 포함)
     public String getExt(String fileName) {
-        int lastIdx = fileName.lastIndexOf(".");
-        return fileName.substring(lastIdx);
+        int lastIdx = fileName.lastIndexOf(".");// . 의 인뎃스 번호 얻어서
+        return fileName.substring(lastIdx); // 그인덱스 까지 잘라서 뒤에내용을 리턴
     }
 
     //랜덤파일명 생성
