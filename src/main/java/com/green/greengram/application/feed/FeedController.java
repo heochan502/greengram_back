@@ -1,6 +1,7 @@
 package com.green.greengram.application.feed;
 
 
+import com.green.greengram.application.feed.model.FeedGetDto;
 import com.green.greengram.application.feed.model.FeedGetReq;
 import com.green.greengram.application.feed.model.FeedPostReq;
 import com.green.greengram.config.model.ResultResponse;
@@ -39,9 +40,17 @@ public class FeedController
     // 현재는 피드랑 사진만(N+1)2가지 정도만?
 
     @GetMapping
-    public ResultResponse<?> getFeedList (@Valid @ModelAttribute FeedGetReq req)
+    public ResultResponse<?> getFeedList (@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                          @Valid @ModelAttribute FeedGetReq req)
     {
+        log.info("SignedUserId : {}", userPrincipal.getSignedUserId());
         log.info("req : {}",req);
+
+        FeedGetDto feedGetDto = FeedGetDto.builder()
+                .signedUserId(userPrincipal.getSignedUserId())
+                .startIdx((req.getPage() - 1)* req.getRowPerPage())
+                .size(req.getRowPerPage())
+                .build();
         return null;
     }
 
