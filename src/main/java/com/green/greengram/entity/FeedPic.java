@@ -24,5 +24,4 @@ public class FeedPic  extends  CreatedAt {
     @ManyToOne()
     @MapsId("feedId")
     private Feed feed;
-
 }

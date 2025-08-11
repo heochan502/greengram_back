@@ -30,7 +30,7 @@ public class Feed extends UpdatedAt{
     private String contents;
 
     //양방향 관계 설정
-    @Builder.Default // builder패턴사용시 null 되는데 이 애노테이션을 주면 주소생성됨
+    @Builder.Default // builder 패턴사용시 null 되는데 이 애노테이션을 주면 주소생성됨
     @OneToMany(mappedBy = "feed",  cascade = CascadeType.ALL, orphanRemoval = true)
     // 최소 1개 라는 의미로 1 넣음
     private List<FeedPic> feedPicList = new ArrayList<>(1);

@@ -37,4 +37,5 @@ public class FeedController
         feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
         return new ResultResponse<>("피드 등록 완료 ", null);
     }
+    // 페이징
 }
