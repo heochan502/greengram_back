@@ -11,10 +11,10 @@ import lombok.ToString;
 public class FeedPostReq {
 //    private Long writeUserId;
 
-    @Size(max = 1_000)
+    @Size(max = 1_000, message = "내용은 1,000자 이하여야 합니다.")
     private String contents;
 
 
-    @Size(max = 30)
+    @Size(max = 30, message = "location은 30자 이하여야 합니다.")
     private String location;
 }
