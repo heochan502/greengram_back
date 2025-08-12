@@ -1,6 +1,8 @@
 package com.green.greengram.application.feed;
 
 
+import com.green.greengram.application.feed.model.FeedGetDto;
+import com.green.greengram.application.feed.model.FeedGetRes;
 import com.green.greengram.application.feed.model.FeedPostReq;
 import com.green.greengram.application.feed.model.FeedPostRes;
 import com.green.greengram.application.user.UserRepository;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.beans.Transient;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +26,7 @@ import java.util.List;
 public class FeedService {
     private final FeedRepository feedRepository;
     private final ImgUploadManager imgUploadManager;
-
+    private final FeedMapper feedMapper;
     @Transactional
     public FeedPostRes postFeed(Long signedUserId , FeedPostReq req, List<MultipartFile> pics)
     {
@@ -43,5 +46,16 @@ public class FeedService {
         return new FeedPostRes(feed.getFeedId(), fileNames);
     }
 
+    public List <FeedGetRes>  getFeedList(FeedGetDto feedGetDto)
+    {
+        List<FeedGetRes> list = feedMapper.findAllLimitedId(feedGetDto);
+        // 각 피드에서 사진 가져오기
+        for (FeedGetRes feedGetRes : list) {
+            feedGetRes.setPics(feedMapper.findAllPicByFeedId(feedGetRes.getFeedId()));
+        }
+
+//        return  feedMapper.findAllLimitedId(feedGetDto) ;
+        return list;
+    }
 
 }

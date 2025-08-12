@@ -1,9 +1,7 @@
 package com.green.greengram.application.feed;
 
 
-import com.green.greengram.application.feed.model.FeedGetDto;
-import com.green.greengram.application.feed.model.FeedGetReq;
-import com.green.greengram.application.feed.model.FeedPostReq;
+import com.green.greengram.application.feed.model.*;
 import com.green.greengram.config.model.ResultResponse;
 import com.green.greengram.config.model.UserPrincipal;
 import com.green.greengram.entity.FeedPicIds;
@@ -33,8 +31,8 @@ public class FeedController
         log.info("user : {}", userPrincipal.getSignedUserId());
         log.info("req : {}",req);
         log.info("pics : {}",pics.size());
-        feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
-        return new ResultResponse<>("피드 등록 완료 ", null);
+        FeedPostRes result = feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
+        return new ResultResponse<>("피드 등록 완료 ", result);
     }
     // 페이징 피드 (사진, 댓글(3개만))
     // 현재는 피드랑 사진만(N+1)2가지 정도만?
@@ -51,7 +49,10 @@ public class FeedController
                 .startIdx((req.getPage() - 1)* req.getRowPerPage())
                 .size(req.getRowPerPage())
                 .build();
-        return null;
+
+        List<FeedGetRes> result = feedService.getFeedList(feedGetDto);
+
+        return new ResultResponse<>(String.format("rows : %d", result.size()), result);
     }
 
 

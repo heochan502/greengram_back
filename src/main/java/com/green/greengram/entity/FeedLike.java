@@ -1,26 +1,29 @@
 package com.green.greengram.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-//@Setter
 @Entity
 @EqualsAndHashCode
-// 빌더 쓸려면 아래 다 필요함
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class FeedPic  extends  CreatedAt {
+public class FeedLike extends CreatedAt {
 
     @EmbeddedId
-    private FeedPicIds feedPicIds;
+    private FeedLikeIds feedLikeIds;
 
-    // 관계설정
+
+    @ManyToOne
     @JoinColumn(name="feed_id")
-    @ManyToOne()
     @MapsId("feedId")
-    private Feed feed;
+    private Feed feedId;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @MapsId("userId")
+    private User userId;
+
 }

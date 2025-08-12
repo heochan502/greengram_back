@@ -4,13 +4,34 @@
 
 
     <select id="findAllLimitedId">
+<!--        SELECT f.feed_id, f.contents, f.location, f.created_at,-->
+<!--        f.writer_user_id, u.uid AS writerUid, u.nick_name AS writerNickName, u.pic AS writerPic-->
+<!--        FROM feed as f-->
+<!--        JOIN user as u ON u.user_id = f.writer_user_id-->
+<!--        ORDER BY f.feed_id DESC-->
+<!--        LIMIT #{startIdx}, #{size}-->
+
         SELECT f.feed_id, f.contents, f.location, f.created_at,
-        f.writer_user_id, u.uid AS writerUid, u.nick_name AS writerNickName, u.pic AS writerPic
-        FROM feed as f
-        JOIN user as u ON u.user_id = f.writer_user_id
+                 f.writer_user_id, u.uid AS writerUid
+                ,u.nick_name AS writerNickName, u.pic AS writerPic
+                , l.feed_id IS NOT NULL AS isLike
+        <!--        ,IF(u.user_id = l.user_id, '1','0') AS isLike 함수 호출이라 속도 느려짐 -->
+            FROM feed AS f
+                INNER JOIN user AS u
+                    ON u.user_id = f.writer_user_id
+
+                LEFT JOIN feed_like as l
+                    ON f.feed_id  = l.feed_id
+                        and l.user_id = #{signedUserId}
         ORDER BY f.feed_id DESC
         LIMIT #{startIdx}, #{size}
     </select>
 
+
+
+    <select id="findAllPicByFeedId">
+        SELECT pic FROM feed_pic
+        WHERE feed_id = #{feed_id}
+    </select>
 
 </mapper>

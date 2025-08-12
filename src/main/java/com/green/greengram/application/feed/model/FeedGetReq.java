@@ -16,7 +16,7 @@ public class FeedGetReq {
     private Integer page;
 
 
-    @Min(value = 20, message = "20이상")
+    @Min(value = 5, message = "20이상")
     @Max(value = 100, message = "100이하")
     @NotNull(message = "필수입니다.")
     private Integer rowPerPage;
