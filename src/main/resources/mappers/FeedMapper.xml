@@ -34,4 +34,7 @@
         WHERE feed_id = #{feed_id}
     </select>
 
+
+
+
 </mapper>

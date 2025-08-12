@@ -1,6 +1,7 @@
 package com.green.greengram.application.feed.model;
 
 
+import com.green.greengram.application.feedcomment.model.FeedCommentGetRes;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,5 +26,7 @@ public class FeedGetRes {
 
     private List<String> pics;
 //    private String updatedAt;
+
+    private FeedCommentGetRes comments; // 댓글 객체
 
 }

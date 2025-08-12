@@ -28,7 +28,9 @@ public class FeedCommentController {
                                               @Valid @RequestBody FeedCommentPostReq req){
         log.info("user : {}", userPrincipal.getSignedUserId());
         log.info("req : {}",req);
-        return null;
+        Long feedCommentId = feedCommentService.postFeedComment(userPrincipal.getSignedUserId(), req);
+        log.info("댓글 등록 번호  : {}",feedCommentId);
+        return new ResultResponse<>(String.format("댓글 입력 완료. "), feedCommentId);
     };
 
 

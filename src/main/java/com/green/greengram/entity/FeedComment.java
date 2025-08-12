@@ -8,6 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 @Builder
 @AllArgsConstructor
+@ToString
 @NoArgsConstructor
 @Getter
 public class FeedComment extends UpdatedAt{
