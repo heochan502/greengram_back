@@ -40,7 +40,8 @@ public class WebSecurityConfiguration {
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource())) // ⭐️⭐️⭐️
                    .authorizeHttpRequests(req ->
                                     req.requestMatchers(HttpMethod.POST, "/api/feed").hasAnyRole(EnumUserRole.USER_1.name() )
-                                   .requestMatchers("/api/feed").authenticated()
+                                   .requestMatchers("/api/feed", "/api/feed/like", "/api/feed/comment").authenticated()
+
                                                     .anyRequest().permitAll()
                    )
                    .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
