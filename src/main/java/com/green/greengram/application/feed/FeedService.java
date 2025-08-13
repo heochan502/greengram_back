@@ -5,19 +5,22 @@ import com.green.greengram.application.feed.model.FeedGetDto;
 import com.green.greengram.application.feed.model.FeedGetRes;
 import com.green.greengram.application.feed.model.FeedPostReq;
 import com.green.greengram.application.feed.model.FeedPostRes;
+import com.green.greengram.application.feedcomment.FeedCommentMapper;
+import com.green.greengram.application.feedcomment.model.FeedCommentGetReq;
+import com.green.greengram.application.feedcomment.model.FeedCommentGetRes;
+import com.green.greengram.application.feedcomment.model.FeedCommentItem;
 import com.green.greengram.application.user.UserRepository;
+import com.green.greengram.config.constants.ConstComment;
 import com.green.greengram.config.util.ImgUploadManager;
 import com.green.greengram.entity.Feed;
 import com.green.greengram.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.beans.Transient;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -27,6 +30,9 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final ImgUploadManager imgUploadManager;
     private final FeedMapper feedMapper;
+    private final FeedCommentMapper feedCommentMapper;
+    private final ConstComment constComment;
+
     @Transactional
     public FeedPostRes postFeed(Long signedUserId , FeedPostReq req, List<MultipartFile> pics)
     {
@@ -50,13 +56,24 @@ public class FeedService {
     {
         List<FeedGetRes> list = feedMapper.findAllLimitedId(feedGetDto);
         // 각 피드에서 사진 가져오기 // 댓글 가져오기 (4개만)
+//      final int COMMENT_STARTIDX = 0;
+//      final int NEED_FOR_VIEW_SIZE = 3;// 피드 리스트를 뿌릴 떄 실제로 피드당 보여지는 댓글 수
+//      final int MORE_COMMENT_COUNT = 4;
         for (FeedGetRes feedGetRes : list) {
             feedGetRes.setPics(feedMapper.findAllPicByFeedId(feedGetRes.getFeedId()));
 
+            //startIdx : 0, size : 4
 
+            FeedCommentGetReq req = new FeedCommentGetReq(  feedGetRes.getFeedId(), constComment.startIndex , constComment.needForViewCount +1);
+            List<FeedCommentItem> commentList = feedCommentMapper.findAllByFeedIdLimitedTo(req);
+            boolean moreComment = commentList.size() > constComment.needForViewCount; // row수가 4였을 때만 true가 담기고 row수가 0~3인 경우는 false가 담긴다.
+            FeedCommentGetRes feedCommentGetRes = new FeedCommentGetRes(  moreComment ,commentList);
+            feedGetRes.setComments( feedCommentGetRes );
+            if(moreComment) // 마지막 댓글 삭제
+            {
+                commentList.remove(commentList.size() - 1);
+            }
         }
-
-
 //        return  feedMapper.findAllLimitedId(feedGetDto) ;
         return list;
     }
