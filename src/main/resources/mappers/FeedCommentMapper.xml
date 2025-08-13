@@ -10,7 +10,7 @@
         FROM feed_comment AS c
         JOIN USER  AS u  on u.user_id = c.user_id
         WHERE  c.feed_id = #{feedId}
-        LIMIT #{startIdx} , #{size}
+        LIMIT #{startIdx} , #{sizePlusOne}
 
     </select>
 

@@ -6,18 +6,25 @@ import com.green.greengram.application.feed.model.FeedGetRes;
 import com.green.greengram.application.feed.model.FeedPostReq;
 import com.green.greengram.application.feed.model.FeedPostRes;
 import com.green.greengram.application.feedcomment.FeedCommentMapper;
+import com.green.greengram.application.feedcomment.FeedCommentService;
 import com.green.greengram.application.feedcomment.model.FeedCommentGetReq;
 import com.green.greengram.application.feedcomment.model.FeedCommentGetRes;
 import com.green.greengram.application.feedcomment.model.FeedCommentItem;
 import com.green.greengram.application.user.UserRepository;
 import com.green.greengram.config.constants.ConstComment;
+import com.green.greengram.config.model.ResultResponse;
+import com.green.greengram.config.model.UserPrincipal;
 import com.green.greengram.config.util.ImgUploadManager;
 import com.green.greengram.entity.Feed;
 import com.green.greengram.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -32,6 +39,7 @@ public class FeedService {
     private final FeedMapper feedMapper;
     private final FeedCommentMapper feedCommentMapper;
     private final ConstComment constComment;
+    private final FeedCommentService feedCommentService;
 
     @Transactional
     public FeedPostRes postFeed(Long signedUserId , FeedPostReq req, List<MultipartFile> pics)
@@ -48,7 +56,7 @@ public class FeedService {
         feedRepository.save(feed);
        // feed 객체는 영속성을 갖는다
         List<String> fileNames = imgUploadManager.saveFeedPics(feed.getFeedId(),pics);
-        feed.addFeedPics(fileNames);
+            feed.addFeedPics(fileNames);
         return new FeedPostRes(feed.getFeedId(), fileNames);
     }
 
@@ -77,5 +85,7 @@ public class FeedService {
 //        return  feedMapper.findAllLimitedId(feedGetDto) ;
         return list;
     }
+
+
 
 }

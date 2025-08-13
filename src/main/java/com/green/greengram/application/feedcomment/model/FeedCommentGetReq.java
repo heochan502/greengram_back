@@ -24,16 +24,20 @@ public class FeedCommentGetReq {
     @NotNull(message = "size값은 1 이상이어야 합니다")
     private Integer size;
 
+    private Integer sizePlusOne;
+
 // 밑의 바인드 파람이랑 똑같음 대신 모든 컬럼 다 적어야함
 //    @ConstructorProperties({"feed_id", "start_idx", "size"})
     public FeedCommentGetReq(@BindParam("feed_id") Long feedId , @BindParam("start_idx")Integer startIdx, Integer size) {
         this.feedId = feedId;
         this.startIdx = startIdx;
         this.size = size;
+        this.sizePlusOne = size + 1;
+
     }
 
-    public Integer getSizePlusOne()
-    {
-        return size +1;
-    }
+//    public Integer getSizePlusOne()
+//    {
+//        return size +1;
+//    }
 }

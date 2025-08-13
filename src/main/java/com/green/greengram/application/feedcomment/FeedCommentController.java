@@ -35,5 +35,17 @@ public class FeedCommentController {
         FeedCommentGetRes res = feedCommentService.getFeedList(req);
         return new ResultResponse<>(String.format("row:%d", res.getCommentList().size()), res);
     }
+    @DeleteMapping
+    public ResultResponse <?> deleteFeedComment(@AuthenticationPrincipal UserPrincipal userPrincipal
+            , @RequestParam("feed_comment_id") Long feedCommentId)
+    {
+
+        log.info("user id : {}", userPrincipal);
+        log.info("feed_comment_id : {}", feedCommentId);
+        feedCommentService.deleteFeedComment(userPrincipal.getSignedUserId(),feedCommentId);
+
+        return new ResultResponse<>("댓글을 삭제하였습니다.", null);
+    }
+
 
 }

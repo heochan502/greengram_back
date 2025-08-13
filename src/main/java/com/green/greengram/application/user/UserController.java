@@ -1,16 +1,19 @@
 package com.green.greengram.application.user;
 
 
+import com.green.greengram.application.user.model.UserProfileGetRes;
 import com.green.greengram.application.user.model.UserSignDto;
 import com.green.greengram.application.user.model.UserSignInReq;
 import com.green.greengram.application.user.model.UserSignUpReq;
 import com.green.greengram.config.jwt.JwtTokenManager;
 import com.green.greengram.config.model.ResultResponse;
+import com.green.greengram.config.model.UserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,5 +55,13 @@ public class UserController {
         return new ResultResponse<>("AccessToken 재발행 성공 ",null);
     }
 
+    @GetMapping
+    public ResultResponse<?> getUser(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                    @RequestParam("profile_user_id") Long profileUserId) {
+
+        UserProfileGetRes userProfileGetRes = userService.getProFileUser(userPrincipal.getSignedUserId(), profileUserId);
+        return null;
+
+    }
 
 }
