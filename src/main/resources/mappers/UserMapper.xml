@@ -6,13 +6,37 @@
     <select id="findAllLimitedId">
 
 
-        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name, count(DISTINCT f.feed_id) as feedCount, count(fl.feed_id) AS allFeedLikeCount
+
+        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name,
+        COUNT(DISTINCT f.feed_id) as feedCount, count(DISTINCT f.feed_id, fl.feed_id) AS allFeedLikeCount
+        , count(DISTINCT uf1.to_user_id)  AS followingCount
+        ,count(DISTINCT uf2.from_user_id)  AS followerCount
         FROM user AS u
         LEFT JOIN feed AS f
-            on u.user_id = f.writer_user_id
+        on u.user_id = f.writer_user_id
+
         LEFT JOIN feed_like AS fl
-            on f.feed_id = fl.feed_id
-        WHERE u.user_id = ${profileUserId};
+        on f.feed_id = fl.feed_id
+
+        LEFT JOIN user_follow AS uf1
+        ON u.user_id = uf1.from_user_id
+
+        LEFT JOIN user_follow AS uf2
+        ON u.user_id = uf2.to_user_id
+
+        WHERE u.user_id =${profileUserId};
+
+
+<!--        -->
+<!--        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name, count(DISTINCT f.feed_id) as feedCount, count(DISTINCT f.feed_id, fl.feed_id) AS allFeedLikeCount-->
+<!--                -->
+<!--        FROM user AS u-->
+<!--        LEFT JOIN feed AS f-->
+<!--            on u.user_id = f.writer_user_id-->
+
+<!--        LEFT JOIN feed_like AS fl-->
+<!--            on f.feed_id = fl.feed_id-->
+<!--        WHERE u.user_id = ${profileUserId};-->
 
 
 <!--        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name, count( f.feed_id)-->
@@ -29,7 +53,6 @@
 <!--        LEFT JOIN feed AS f-->
 <!--        on u.user_id = f.writer_user_id-->
 <!--        WHERE u.user_id = 1 ;-->
-
 
 
     </select>

@@ -23,16 +23,25 @@ public class UserFollow extends CreatedAt {
     @MapsId("fromUserId") // 이거는 뒤에 ids의 필드명 적는거
     @ManyToOne
     @JoinColumn(name="from_user_id") // join 하고 컬럼명 보이는거
-    private User fromUserId;
+    private User fromUser;
 
     @MapsId("toUserId")
     @ManyToOne
     @JoinColumn(name="to_user_id")
-    private User toUserId;
+    private User toUser;
 
 
 
+    public void userFollow()
+    {
+        User user = new User();
+        user.setUserId(userFollowIds.getFromUserId());
+        this.fromUser = user;
+        user = new User();
+        user.setUserId(userFollowIds.getToUserId());
+        this.toUser = user;
 
+    }
 
 //    @Id
 //    @ManyToOne

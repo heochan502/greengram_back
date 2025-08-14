@@ -9,10 +9,11 @@ import java.io.Serializable;
 
 
 @Getter
-@Setter
+@Builder
 @Embeddable
 @EqualsAndHashCode
-
+@AllArgsConstructor
+@NoArgsConstructor
 //@AllArgsConstructor
 //@NoArgsConstructor
 // 여기가 복합기 설정 하는 곳

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user/follow")
 @RequiredArgsConstructor
 public class FollowController {
-    private FollowService followService;
+    private final FollowService followService;
 
     @PostMapping
     public ResultResponse<?> postUserFollow(@AuthenticationPrincipal UserPrincipal userPrincipal
