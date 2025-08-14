@@ -16,5 +16,5 @@ public class UserProfileGetRes {
     private String nickName;
     private int feedCount;// 프로파일 유저의 등록한 피드 수
 
-    private int allFeedLickCount; // 나의 모든 피드이 좋아요 수
+    private int allFeedLikeCount; // 나의 모든 피드이 좋아요 수
 }

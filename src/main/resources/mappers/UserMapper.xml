@@ -4,35 +4,36 @@
 
 
     <select id="findAllLimitedId">
-<!--        SELECT f.feed_id, f.contents, f.location, f.created_at,-->
-<!--        f.writer_user_id, u.uid AS writerUid, u.nick_name AS writerNickName, u.pic AS writerPic-->
-<!--        FROM feed as f-->
-<!--        JOIN user as u ON u.user_id = f.writer_user_id-->
-<!--        ORDER BY f.feed_id DESC-->
-<!--        LIMIT #{startIdx}, #{size}-->
 
-        SELECT f.feed_id, f.contents, f.location, f.created_at,
-                 f.writer_user_id, u.uid AS writerUid
-                ,u.nick_name AS writerNickName, u.pic AS writerPic
-                , l.feed_id IS NOT NULL AS isLike
-        <!--        ,IF(u.user_id = l.user_id, '1','0') AS isLike 함수 호출이라 속도 느려짐 -->
-            FROM feed AS f
-                INNER JOIN user AS u
-                    ON u.user_id = f.writer_user_id
 
-                LEFT JOIN feed_like as l
-                    ON f.feed_id  = l.feed_id
-                        and l.user_id = #{signedUserId}
-        ORDER BY f.feed_id DESC
-        LIMIT #{startIdx}, #{size}
+        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name, count(DISTINCT f.feed_id) as feedCount, count(fl.feed_id) AS allFeedLikeCount
+        FROM user AS u
+        LEFT JOIN feed AS f
+            on u.user_id = f.writer_user_id
+        LEFT JOIN feed_like AS fl
+            on f.feed_id = fl.feed_id
+        WHERE u.user_id = ${profileUserId};
+
+
+<!--        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name, count( f.feed_id)-->
+<!--        ,sum((SELECT COUNT(feed_id) FROM feed_like WHERE feed_id = f.feed_id )) AS allFeedLikeCount-->
+<!--        FROM user AS u-->
+<!--        LEFT JOIN feed AS f-->
+<!--        on u.user_id = f.writer_user_id-->
+<!--        WHERE u.user_id = ${signedUserid};-->
+
+
+
+        <!--        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name, count( f.feed_id) ,sum((SELECT COUNT(feed_id) FROM feed_like WHERE feed_id = f.feed_id )) AS USERcount-->
+<!--        FROM user AS u-->
+<!--        LEFT JOIN feed AS f-->
+<!--        on u.user_id = f.writer_user_id-->
+<!--        WHERE u.user_id = 1 ;-->
+
+
+
     </select>
 
-
-
-    <select id="findAllPicByFeedId">
-        SELECT pic FROM feed_pic
-        WHERE feed_id = #{feed_id}
-    </select>
 
 
 

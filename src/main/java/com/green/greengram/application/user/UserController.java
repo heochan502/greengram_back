@@ -1,10 +1,7 @@
 package com.green.greengram.application.user;
 
 
-import com.green.greengram.application.user.model.UserProfileGetRes;
-import com.green.greengram.application.user.model.UserSignDto;
-import com.green.greengram.application.user.model.UserSignInReq;
-import com.green.greengram.application.user.model.UserSignUpReq;
+import com.green.greengram.application.user.model.*;
 import com.green.greengram.config.jwt.JwtTokenManager;
 import com.green.greengram.config.model.ResultResponse;
 import com.green.greengram.config.model.UserPrincipal;
@@ -55,12 +52,14 @@ public class UserController {
         return new ResultResponse<>("AccessToken 재발행 성공 ",null);
     }
 
-    @GetMapping
+    @GetMapping("/profile")
     public ResultResponse<?> getUser(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                     @RequestParam("profile_user_id") Long profileUserId) {
 
-        UserProfileGetRes userProfileGetRes = userService.getProFileUser(userPrincipal.getSignedUserId(), profileUserId);
-        return null;
+        log.info("profileUserId : {}", profileUserId);
+        UserProfileGetDto dto = new UserProfileGetDto(userPrincipal.getSignedUserId(), profileUserId);
+        UserProfileGetRes userProfileGetRes = userService.getProFileUser(dto);
+        return new ResultResponse<>("프로파일 유저 정보", userProfileGetRes);
 
     }
 

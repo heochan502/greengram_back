@@ -24,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ImgUploadManager imgUploadManager;
+    private final UserMapper userMapper;
 
     @Transactional // 트랜젝션 기능
     public void signup(UserSignUpReq req, MultipartFile pic)
@@ -74,7 +75,7 @@ public class UserService {
                 .userSignInRes(userSignInRes)
                 .build();
     }
-    public UserProfileGetRes getProFileUser(Long signedUserId, Long profileUserId )
+    public UserProfileGetRes getProFileUser(UserProfileGetDto dto )
     {
 
 

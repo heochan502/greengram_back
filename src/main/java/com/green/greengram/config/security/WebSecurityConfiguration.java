@@ -40,8 +40,8 @@ public class WebSecurityConfiguration {
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource())) // ⭐️⭐️⭐️
                    .authorizeHttpRequests(req ->
                                         req.requestMatchers(HttpMethod.POST, "/api/feed").hasAnyRole(EnumUserRole.USER_1.name() )
-                                           .requestMatchers(HttpMethod.GET,"/api/user").authenticated()
-                                           .requestMatchers("/api/feed", "/api/feed/like", "/api/feed/comment").authenticated()
+                                           .requestMatchers(HttpMethod.GET,"/api/user/profile").authenticated()
+                                           .requestMatchers("/api/feed", "/api/feed/like", "/api/feed/comment", "/api/user/follow").authenticated()
 
                                                     .anyRequest().permitAll()
                    )
