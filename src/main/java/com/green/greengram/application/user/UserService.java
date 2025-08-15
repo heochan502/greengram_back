@@ -75,12 +75,13 @@ public class UserService {
                 .userSignInRes(userSignInRes)
                 .build();
     }
-    @Transactional
+
     public UserProfileGetRes getProFileUser(UserProfileGetDto dto )
     {
         return userMapper.findProfileByUserId(dto);
     }
 
+    @Transactional
     public String patchProfilePic(Long signedUserId, MultipartFile pic)
     {
         User user = userRepository.findById(signedUserId)

@@ -41,7 +41,12 @@ public class WebSecurityConfiguration {
                    .authorizeHttpRequests(req ->
                                         req.requestMatchers(HttpMethod.POST, "/api/feed").hasAnyRole(EnumUserRole.USER_1.name() )
                                            .requestMatchers(HttpMethod.GET,"/api/user/profile").authenticated()
-                                           .requestMatchers("/api/feed", "/api/feed/like", "/api/feed/comment", "/api/user/follow").authenticated()
+                                           .requestMatchers("/api/feed"
+                                                   , "/api/feed/like"
+                                                   , "/api/feed/comment"
+                                                   , "/api/user/follow"
+                                                    ,"/api/user/profile"
+                                                    , "api/user/profile/pic").authenticated()
 
                                                     .anyRequest().permitAll()
                    )

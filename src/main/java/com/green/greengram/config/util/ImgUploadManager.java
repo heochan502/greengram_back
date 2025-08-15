@@ -45,9 +45,10 @@ public class ImgUploadManager {
         return String.format("%s/%s/%d",  constFile.getUploadDirectory(), constFile.getProfilePic(), userId);
     }
     //저장한 파일명 리턴
-    public String saveProfilePic(Long id, MultipartFile profilePicFile) {
+    public String saveProfilePic(Long userId, MultipartFile profilePicFile) {
         //폴더 생성
-        String directory = String.format("%s/%s/%d", constFile.getUploadDirectory(), constFile.getProfilePic(), id);
+//        String directory = String.format("%s/%s/%d", constFile.getUploadDirectory(), constFile.getProfilePic(), id);
+        String directory = makeProfileDirectoryPath(userId);
         myFileUtils.makeFolders(directory);
 
         String randomFileName = myFileUtils.makeRandomFileName(profilePicFile);
