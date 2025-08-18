@@ -25,5 +25,6 @@ public class FeedGetReq {
         this.page = page;
         this.rowPerPage = rowPerPage;
 
+
     }
 }
