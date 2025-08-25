@@ -9,6 +9,7 @@ import com.green.greengram.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,7 +82,7 @@ public class UserService {
         return userMapper.findProfileByUserId(dto);
     }
 
-    @Transactional
+    @Transactional // 다이렉트로 트렌젝션을 걸어야한다
     public String patchProfilePic(Long signedUserId, MultipartFile pic)
     {
         User user = userRepository.findById(signedUserId)
@@ -91,5 +92,17 @@ public class UserService {
         String savedFileName = imgUploadManager.saveProfilePic(signedUserId, pic);
         user.setPic(savedFileName);
         return savedFileName;
+    }
+
+    @Transactional 
+    public void deleteProfilePic (Long signedUserId)
+    {
+        User user = userRepository.findById(signedUserId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다."));
+
+        imgUploadManager.removeProfileDirectory(signedUserId);
+        user.setPic(null);
+        log.info("성공: {}", user );
+//        userRepository.save(user);
     }
 }

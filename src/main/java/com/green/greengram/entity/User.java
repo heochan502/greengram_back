@@ -3,6 +3,7 @@ package com.green.greengram.entity;
 
 
 import com.green.greengram.config.enumcode.model.EnumUserRole;
+import com.green.greengram.config.security.SignInProviderType;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,13 +16,13 @@ import java.util.List;
 @Setter
 @Entity
 @EqualsAndHashCode
-//@Table(
-//        uniqueConstraints = {
-//                @UniqueConstraint(
-//                        columnNames = {"uid"}
-//                )
-//        }
-//)
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {"uid", "providerType"}
+                )
+        }
+)
 // 위는 복합적으로 줄 때 쓰면 댐
 
 public class User extends UpdatedAt {
@@ -29,11 +30,14 @@ public class User extends UpdatedAt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = true, length = 30)
-    private String nickName;
+    @Column(nullable = false, length = 2)
+    private SignInProviderType providerType;
 
     @Column(nullable = false, length = 50, unique = true)
     private String uid;
+
+    @Column(nullable = true, length = 30)
+    private String nickName;
 
     @Column(nullable = false, length = 100)
     private String upw;

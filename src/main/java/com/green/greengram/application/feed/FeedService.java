@@ -6,26 +6,31 @@ import com.green.greengram.application.feed.model.FeedGetRes;
 import com.green.greengram.application.feed.model.FeedPostReq;
 import com.green.greengram.application.feed.model.FeedPostRes;
 import com.green.greengram.application.feedcomment.FeedCommentMapper;
+import com.green.greengram.application.feedcomment.FeedCommentRepository;
 import com.green.greengram.application.feedcomment.FeedCommentService;
 import com.green.greengram.application.feedcomment.model.FeedCommentGetReq;
 import com.green.greengram.application.feedcomment.model.FeedCommentGetRes;
 import com.green.greengram.application.feedcomment.model.FeedCommentItem;
+import com.green.greengram.application.feedlike.FeedLikeRepository;
 import com.green.greengram.application.user.UserRepository;
 import com.green.greengram.config.constants.ConstComment;
 import com.green.greengram.config.model.ResultResponse;
 import com.green.greengram.config.model.UserPrincipal;
 import com.green.greengram.config.util.ImgUploadManager;
 import com.green.greengram.entity.Feed;
+import com.green.greengram.entity.FeedLikeIds;
 import com.green.greengram.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -40,6 +45,8 @@ public class FeedService {
     private final FeedCommentMapper feedCommentMapper;
     private final ConstComment constComment;
     private final FeedCommentService feedCommentService;
+    private final FeedLikeRepository feedLikeRepository;
+    private final FeedCommentRepository feedCommentRepository;
 
     @Transactional
     public FeedPostRes postFeed(Long signedUserId , FeedPostReq req, List<MultipartFile> pics)
@@ -86,6 +93,37 @@ public class FeedService {
         return list;
     }
 
+    @Transactional
+    public void deleteFeed(Long signedUserId, Long feedId )
+    {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "feed_id가 존재 하지 않습니다."));
+        if (feed.getWriterUserId().getUserId() != signedUserId){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "피드 삭제 권한이 없습니다.");
+
+        }
+        // 해당 피드 좋아요 삭제
+//        FeedLikeIds feedLikeIds = FeedLikeIds.builder()
+//                .feedId(feedId)
+//                .userId(signedUserId)
+//                .build();
+
+        feedLikeRepository.deleteByFeedLikeIdsFeedId(feedId);
+
+        //해당 피드 댓글 삭제
+
+//        feedCommentService.deleteFeedCommentByFeedId(feedId);
+
+        feedCommentRepository.deleteByFeedIdFeedId(feedId);
+
+        // 피드 삭제
+        feedRepository.delete(feed);
+
+        //해당 피드 사진 폴더 삭제
+        imgUploadManager.removeFeedDirectory(feedId);
+
+
+    }
 
 
 }

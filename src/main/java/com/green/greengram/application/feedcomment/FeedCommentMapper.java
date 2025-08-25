@@ -9,5 +9,6 @@ import java.util.List;
 @Mapper
 public interface FeedCommentMapper {
     List<FeedCommentItem> findAllByFeedIdLimitedTo(FeedCommentGetReq req);
+    int deleteByFeedId(Long feedCommentId);
 
 }

@@ -39,4 +39,16 @@ public class FollowService{
 
 
     }
+
+    public void deleteUserFollow(long fromUserId, long toUserId) {
+        UserFollowIds userFollowIds = getIds(fromUserId, toUserId);
+        followRepository.deleteById(userFollowIds);
+    }
+
+    private UserFollowIds getIds(long fromUserId, long toUserId) {
+        return UserFollowIds.builder()
+                .fromUserId(fromUserId)
+                .toUserId(toUserId)
+                .build();
+    }
 }

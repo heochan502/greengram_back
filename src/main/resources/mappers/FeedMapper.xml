@@ -11,20 +11,50 @@
 <!--        ORDER BY f.feed_id DESC-->
 <!--        LIMIT #{startIdx}, #{size}-->
 
-        SELECT f.feed_id, f.contents, f.location, f.created_at,
-                 f.writer_user_id, u.uid AS writerUid
-                ,u.nick_name AS writerNickName, u.pic AS writerPic
-                , l.feed_id IS NOT NULL AS isLike
-        <!--        ,IF(u.user_id = l.user_id, '1','0') AS isLike 함수 호출이라 속도 느려짐 -->
-            FROM feed AS f
-                INNER JOIN user AS u
-                    ON u.user_id = f.writer_user_id
+<!--        SELECT f.feed_id, f.contents, f.location, f.created_at,-->
+<!--                 f.writer_user_id, u.uid AS writerUid-->
+<!--                ,u.nick_name AS writerNickName, u.pic AS writerPic-->
+<!--                , l.feed_id IS NOT NULL AS isLike-->
+<!--        &lt;!&ndash;        ,IF(u.user_id = l.user_id, '1','0') AS isLike 함수 호출이라 속도 느려짐 &ndash;&gt;-->
+<!--                , l.like_count as likeCount-->
+<!--            FROM feed AS f-->
+<!--                INNER JOIN user AS u-->
+<!--                    ON u.user_id = f.writer_user_id-->
 
-                LEFT JOIN feed_like as l
-                    ON f.feed_id  = l.feed_id
-                        and l.user_id = #{signedUserId}
+<!--                LEFT JOIN feed_like as l-->
+<!--                    ON f.feed_id  = l.feed_id-->
+<!--                        and l.user_id = #{signedUserId}-->
+<!--        ORDER BY f.feed_id DESC-->
+<!--        LIMIT #{startIdx}, #{size}-->
+
+        SELECT f.feed_id, f.contents, f.location, f.created_at,
+        f.writer_user_id, u.uid AS writerUid
+        ,u.nick_name AS writerNickName, u.pic AS writerPic
+        , l.feed_id IS NOT NULL AS isLike
+<!--        , ( select  COUNT(user_id) FROM feed_like WHERE f.feed_id = feed_id) AS likeCount-->
+        , COUNT(lc.user_id) AS likeCount
+        FROM feed AS f
+        INNER JOIN user AS u
+        ON u.user_id = f.writer_user_id
+
+        LEFT JOIN feed_like as l
+        ON f.feed_id  = l.feed_id
+        and l.user_id = #{signedUserId}
+        <if test="profileUserId != null">
+            WHERE f.writer_user_id = #{profileUserId}
+        </if>
+
+        LEFT JOIN feed_like AS lc
+        ON f.feed_id = lc.feed_id
+
+        GROUP BY f.feed_id
+
         ORDER BY f.feed_id DESC
-        LIMIT #{startIdx}, #{size}
+        LIMIT #{startIdx}, #{size};
+
+
+
+
     </select>
 
 

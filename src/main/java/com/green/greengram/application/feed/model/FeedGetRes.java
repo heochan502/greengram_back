@@ -22,7 +22,8 @@ public class FeedGetRes {
     private String writerNickName;
     private String writerPic;
 
-    private int isLike; //0: 좋아요가 안된 피드 // 1 이면 내가 좋아요한
+    private int isLike; //0: 좋아요가 안된 피드 // 1 이면 내가 좋아요한\
+    private int likeCount; // 좋아요 수
 
     private List<String> pics;
 //    private String updatedAt;

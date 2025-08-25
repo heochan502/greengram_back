@@ -14,7 +14,10 @@
 
     </select>
 
-
+    <delete id="deleteByFeedId">
+        DELETE FROM feed_comment
+        WHERE feed_id = #{feedId}
+    </delete>
 
 
 

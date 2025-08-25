@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.io.Serializable;
 
 public interface FeedLikeRepository extends JpaRepository<FeedLike, FeedLikeIds> {
+    void deleteByFeedLikeIdsFeedId(Long feedLike);
 }

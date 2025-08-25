@@ -81,7 +81,11 @@ public class FeedCommentService {
         // 댓글 삭제
         feedCommentRepository.deleteById(feedCommentId);
 
-
-
     }
+//    public void deleteFeedCommentByFeedId( Long feedCommentId)
+//    {
+//        int result = feedCommentMapper.deleteByFeedId(feedCommentId);
+//        log.info("result : {}"  , result );
+//    }
+
 }

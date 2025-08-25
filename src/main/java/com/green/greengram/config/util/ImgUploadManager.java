@@ -84,4 +84,18 @@ public class ImgUploadManager {
         }
         return randomFileName;
     }
+
+
+    private String makeFeedDirectoryPath(Long feedId) {
+        return String.format("%s/%s/%d", constFile.getUploadDirectory(), constFile.getFeedPic(), feedId);
+
+    }
+    //피드 폴더 삭제
+    public void removeFeedDirectory(Long userId) {
+        String directory = makeFeedDirectoryPath(userId);
+        myFileUtils.deleteFolder(directory, true);
+    }
+
+
+
 }
