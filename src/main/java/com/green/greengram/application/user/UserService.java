@@ -4,6 +4,7 @@ package com.green.greengram.application.user;
 import com.green.greengram.application.user.model.*;
 import com.green.greengram.config.enumcode.model.EnumUserRole;
 import com.green.greengram.config.model.JwtUser;
+import com.green.greengram.config.security.SignInProviderType;
 import com.green.greengram.config.util.ImgUploadManager;
 import com.green.greengram.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class UserService {
 
 
         User user = new User();
+        user.setProviderType(SignInProviderType.LOCAL);
         user.setNickName(req.getNickName());
         user.setUid(req.getUid());
         user.setUpw(hashedPassword);

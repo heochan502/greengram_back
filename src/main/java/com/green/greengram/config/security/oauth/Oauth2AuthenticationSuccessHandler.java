@@ -65,9 +65,14 @@ public class Oauth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String refreshToken = jwtTokenManager.generateRefreshToken(jwtUser);
 
         cookieUtils.setCookie(res, constJwt.getRefreshTokenCookieName()
-                    , refreshToken
-                    , constJwt.getRefreshTokenCookieValiditySeconds()
-                    , constJwt.getRefreshTokenCookiePath());
+                    , accessToken
+                    , constJwt.getAccessTokenCookieValiditySeconds()
+                    , constJwt.getAccessTokenCookiePath());
+
+        cookieUtils.setCookie(res, constJwt.getRefreshTokenCookieName()
+                , refreshToken
+                , constJwt.getRefreshTokenCookieValiditySeconds()
+                , constJwt.getRefreshTokenCookiePath());
 
         /*
             쿼리스트링 생성

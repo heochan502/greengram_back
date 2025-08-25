@@ -1,6 +1,8 @@
 package com.green.greengram.config.security;
 
+import com.green.greengram.config.constants.ConstOAuth2;
 import com.green.greengram.config.enumcode.model.EnumUserRole;
+import com.green.greengram.config.security.oauth.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -27,6 +30,13 @@ public class WebSecurityConfiguration {
 
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
     private final TokenAuthenticationEntryPoint tokenAuthenticationEntryPoint;
+
+
+    private final Oauth2AuthenticationRequestBasedOnCookieRepository repository;
+    private final Oauth2AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final Oauth2AuthenticationFailureHandler authenticationFailureHandler;
+    private final MyOauth2UserService myOauth2UserService;
+    private final ConstOAuth2 constOAuth2;
 
     //Bean 메소드
     @Bean
@@ -51,8 +61,17 @@ public class WebSecurityConfiguration {
                                                     .anyRequest().permitAll()
                    )
                    .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                   .exceptionHandling(e -> e.authenticationEntryPoint(tokenAuthenticationEntryPoint))
-                   .build();
+                .oauth2Login(oauth2-> oauth2.authorizationEndpoint(auth -> auth.baseUri(constOAuth2.baseUri)
+                                                           .authorizationRequestRepository(repository)
+                                        )
+                                        .redirectionEndpoint( redirection -> redirection.baseUri("/*/oauth2/code/*"))
+                                        .userInfoEndpoint(userInfo ->userInfo.userService(myOauth2UserService))
+                                        .successHandler(authenticationSuccessHandler)
+                                        .failureHandler(authenticationFailureHandler)
+                    )
+                    .addFilterBefore(new Oauth2AuthenticationCheckRedirectUriFilter(constOAuth2), OAuth2AuthorizationRequestRedirectFilter.class)
+                    .exceptionHandling(e -> e.authenticationEntryPoint(tokenAuthenticationEntryPoint))
+                    .build();
     }
 
     // ⭐️ CORS 설정
