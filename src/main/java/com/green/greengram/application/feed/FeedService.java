@@ -1,10 +1,7 @@
 package com.green.greengram.application.feed;
 
 
-import com.green.greengram.application.feed.model.FeedGetDto;
-import com.green.greengram.application.feed.model.FeedGetRes;
-import com.green.greengram.application.feed.model.FeedPostReq;
-import com.green.greengram.application.feed.model.FeedPostRes;
+import com.green.greengram.application.feed.model.*;
 import com.green.greengram.application.feedcomment.FeedCommentMapper;
 import com.green.greengram.application.feedcomment.FeedCommentRepository;
 import com.green.greengram.application.feedcomment.FeedCommentService;
@@ -34,6 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -92,6 +90,11 @@ public class FeedService {
 //        return  feedMapper.findAllLimitedId(feedGetDto) ;
         return list;
     }
+    // set 중복 제거후 list생성
+    public Set<String> getKeywordList(FeedKeywordGetReq req) {
+        return feedMapper.findAllByKeyword(req);
+    }
+
 
     @Transactional
     public void deleteFeed(Long signedUserId, Long feedId )

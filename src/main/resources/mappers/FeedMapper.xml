@@ -3,65 +3,113 @@
 <mapper namespace="com.green.greengram.application.feed.FeedMapper">
 
 
+<!--    <select id="findAllLimitedId">-->
+<!--&lt;!&ndash;        SELECT f.feed_id, f.contents, f.location, f.created_at,&ndash;&gt;-->
+<!--&lt;!&ndash;        f.writer_user_id, u.uid AS writerUid, u.nick_name AS writerNickName, u.pic AS writerPic&ndash;&gt;-->
+<!--&lt;!&ndash;        FROM feed as f&ndash;&gt;-->
+<!--&lt;!&ndash;        JOIN user as u ON u.user_id = f.writer_user_id&ndash;&gt;-->
+<!--&lt;!&ndash;        ORDER BY f.feed_id DESC&ndash;&gt;-->
+<!--&lt;!&ndash;        LIMIT #{startIdx}, #{size}&ndash;&gt;-->
+
+<!--&lt;!&ndash;        SELECT f.feed_id, f.contents, f.location, f.created_at,&ndash;&gt;-->
+<!--&lt;!&ndash;                 f.writer_user_id, u.uid AS writerUid&ndash;&gt;-->
+<!--&lt;!&ndash;                ,u.nick_name AS writerNickName, u.pic AS writerPic&ndash;&gt;-->
+<!--&lt;!&ndash;                , l.feed_id IS NOT NULL AS isLike&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash;        ,IF(u.user_id = l.user_id, '1','0') AS isLike 함수 호출이라 속도 느려짐 &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                , l.like_count as likeCount&ndash;&gt;-->
+<!--&lt;!&ndash;            FROM feed AS f&ndash;&gt;-->
+<!--&lt;!&ndash;                INNER JOIN user AS u&ndash;&gt;-->
+<!--&lt;!&ndash;                    ON u.user_id = f.writer_user_id&ndash;&gt;-->
+
+<!--&lt;!&ndash;                LEFT JOIN feed_like as l&ndash;&gt;-->
+<!--&lt;!&ndash;                    ON f.feed_id  = l.feed_id&ndash;&gt;-->
+<!--&lt;!&ndash;                        and l.user_id = #{signedUserId}&ndash;&gt;-->
+<!--&lt;!&ndash;        ORDER BY f.feed_id DESC&ndash;&gt;-->
+<!--&lt;!&ndash;        LIMIT #{startIdx}, #{size}&ndash;&gt;-->
+
+<!--        SELECT f.feed_id, f.contents, f.location, f.created_at,-->
+<!--        f.writer_user_id, u.uid AS writerUid-->
+<!--        ,u.nick_name AS writerNickName, u.pic AS writerPic-->
+<!--        , l.feed_id IS NOT NULL AS isLike-->
+<!--&lt;!&ndash;        , ( select  COUNT(user_id) FROM feed_like WHERE f.feed_id = feed_id) AS likeCount&ndash;&gt;-->
+<!--        , COUNT(l.user_id) AS likeCount-->
+<!--        FROM feed AS f-->
+<!--        INNER JOIN user AS u-->
+<!--        ON u.user_id = f.writer_user_id-->
+
+<!--        LEFT JOIN feed_like as l-->
+<!--        ON f.feed_id  = l.feed_id-->
+<!--&lt;!&ndash;        <where>&ndash;&gt;-->
+<!--&lt;!&ndash;            <if test="profileUserId != null and profileUserId > 0">&ndash;&gt;-->
+<!--&lt;!&ndash;                f.writer_user_id = #{profileUserId}&ndash;&gt;-->
+<!--&lt;!&ndash;            </if>&ndash;&gt;-->
+<!--&lt;!&ndash;            <if test="keyword != null">&ndash;&gt;-->
+<!--&lt;!&ndash;                AND (f.contents = #{keyword} OR f.location = #{keyword})&ndash;&gt;-->
+<!--&lt;!&ndash;            </if>&ndash;&gt;-->
+<!--&lt;!&ndash;        </where>&ndash;&gt;-->
+<!--&lt;!&ndash;        ORDER BY f.feed_id DESC&ndash;&gt;-->
+<!--&lt;!&ndash;        LIMIT #{startIdx}, #{size}&ndash;&gt;-->
+
+<!--        and l.user_id = #{signedUserId}-->
+
+<!--        <if test="profileUserId != null">-->
+<!--            WHERE f.writer_user_id = #{profileUserId}-->
+<!--        </if>-->
+
+<!--        LEFT JOIN feed_like AS lc-->
+<!--        ON f.feed_id = lc.feed_id-->
+
+<!--        GROUP BY f.feed_id-->
+
+<!--        ORDER BY f.feed_id DESC-->
+<!--        LIMIT #{startIdx}, #{size};-->
+<!--    </select>-->
+
     <select id="findAllLimitedId">
-<!--        SELECT f.feed_id, f.contents, f.location, f.created_at,-->
-<!--        f.writer_user_id, u.uid AS writerUid, u.nick_name AS writerNickName, u.pic AS writerPic-->
-<!--        FROM feed as f-->
-<!--        JOIN user as u ON u.user_id = f.writer_user_id-->
-<!--        ORDER BY f.feed_id DESC-->
-<!--        LIMIT #{startIdx}, #{size}-->
-
-<!--        SELECT f.feed_id, f.contents, f.location, f.created_at,-->
-<!--                 f.writer_user_id, u.uid AS writerUid-->
-<!--                ,u.nick_name AS writerNickName, u.pic AS writerPic-->
-<!--                , l.feed_id IS NOT NULL AS isLike-->
-<!--        &lt;!&ndash;        ,IF(u.user_id = l.user_id, '1','0') AS isLike 함수 호출이라 속도 느려짐 &ndash;&gt;-->
-<!--                , l.like_count as likeCount-->
-<!--            FROM feed AS f-->
-<!--                INNER JOIN user AS u-->
-<!--                    ON u.user_id = f.writer_user_id-->
-
-<!--                LEFT JOIN feed_like as l-->
-<!--                    ON f.feed_id  = l.feed_id-->
-<!--                        and l.user_id = #{signedUserId}-->
-<!--        ORDER BY f.feed_id DESC-->
-<!--        LIMIT #{startIdx}, #{size}-->
-
-        SELECT f.feed_id, f.contents, f.location, f.created_at,
-        f.writer_user_id, u.uid AS writerUid
-        ,u.nick_name AS writerNickName, u.pic AS writerPic
-        , l.feed_id IS NOT NULL AS isLike
-<!--        , ( select  COUNT(user_id) FROM feed_like WHERE f.feed_id = feed_id) AS likeCount-->
-        , COUNT(lc.user_id) AS likeCount
+        SELECT f.feed_id, f.contents, f.location, f.created_at, f.writer_user_id
+        , u.uid AS writerUid, u.nick_name AS writerNickName, u.pic AS writerPic
+        , fl.feed_id IS NOT NULL AS isLike
+        , IFNULL(flc.likeCount, 0) AS likeCount
         FROM feed AS f
         INNER JOIN user AS u
         ON u.user_id = f.writer_user_id
-
-        LEFT JOIN feed_like as l
-        ON f.feed_id  = l.feed_id
-        and l.user_id = #{signedUserId}
-        <if test="profileUserId != null">
-            WHERE f.writer_user_id = #{profileUserId}
-        </if>
-
-        LEFT JOIN feed_like AS lc
-        ON f.feed_id = lc.feed_id
-
-        GROUP BY f.feed_id
-
+        LEFT JOIN feed_like fl
+        ON fl.feed_id = f.feed_id
+        AND fl.user_id = #{signedUserId}
+        LEFT JOIN (
+        SELECT feed_id, COUNT(feed_id) AS likeCount
+        FROM feed_like
+        GROUP BY feed_id
+        ) flc
+        ON flc.feed_id = f.feed_id
+        <where>
+            <if test="profileUserId != null and profileUserId > 0">
+                f.writer_user_id = #{profileUserId}
+            </if>
+            <if test="keyword != null">
+                AND (f.contents = #{keyword} OR f.location = #{keyword})
+            </if>
+        </where>
         ORDER BY f.feed_id DESC
-        LIMIT #{startIdx}, #{size};
-
-
-
-
+        LIMIT #{startIdx}, #{size}
     </select>
 
 
 
     <select id="findAllPicByFeedId">
-        SELECT pic FROM feed_pic
-        WHERE feed_id = #{feed_id}
+        SELECT pic
+            FROM feed_pic
+            WHERE feed_id = #{feed_id}
+    </select>
+
+    <select id="findAllByKeyword">
+        SELECT contents AS keyword
+            FROM feed
+            WHERE contents LIKE '%${keyword}%'
+        UNION ALL
+        SELECT location
+            FROM feed
+           WHERE location LIKE '%${keyword}'
     </select>
 
 

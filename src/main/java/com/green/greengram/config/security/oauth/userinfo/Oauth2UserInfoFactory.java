@@ -10,6 +10,7 @@ import java.util.Map;
     HashMap 형식으로 파싱
     HashMap을 이용한 규격화된 객체로 파싱
  */
+// 빈등록
 @Component
 public class Oauth2UserInfoFactory {
     public Oauth2UserInfo getOauth2UserInfo(SignInProviderType signInProviderType, Map<String, Object> attributes) {

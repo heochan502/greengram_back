@@ -83,7 +83,8 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
         JwtUser jwtUser = new OAuth2JwtUser(nickName, user.getPic(),user.getUserId(), roles);
 
         UserPrincipal myUserDetails = new UserPrincipal(jwtUser);
-        return myUserDetails;
+        return myUserDetails; // 이객체는 OAuth2AuthenticationSuccesssHandler 객체의 onAuthenticationSuccess 메소드의 Authentication auth 매개변수로 전달된다.
+
     }
 }
 

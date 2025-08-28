@@ -11,4 +11,5 @@ public class FeedGetDto {
     private int startIdx;
     private int size;
     private Long profileUserId;
+    private String keyword;
 }

@@ -58,21 +58,24 @@ public class Oauth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         OAuth2JwtUser oAuth2JwtUser = (OAuth2JwtUser) myUserDetails.getJwtUser();
 
+        // nickname이랑 pic 정보 까지 추가되어서 토큰 만들어지는거 방지하기위해서
         JwtUser jwtUser = new JwtUser(oAuth2JwtUser.getSignedUserId(), oAuth2JwtUser.getRoles());
 
         //AT, RT 생성
-        String accessToken = jwtTokenManager.generateAccessToken(jwtUser);
-        String refreshToken = jwtTokenManager.generateRefreshToken(jwtUser);
-
-        cookieUtils.setCookie(res, constJwt.getRefreshTokenCookieName()
-                    , accessToken
-                    , constJwt.getAccessTokenCookieValiditySeconds()
-                    , constJwt.getAccessTokenCookiePath());
-
-        cookieUtils.setCookie(res, constJwt.getRefreshTokenCookieName()
-                , refreshToken
-                , constJwt.getRefreshTokenCookieValiditySeconds()
-                , constJwt.getRefreshTokenCookiePath());
+        jwtTokenManager.issue(res, jwtUser);
+        // 작업이 위의작업과 동일
+//        String accessToken = jwtTokenManager.generateAccessToken(jwtUser);
+//        String refreshToken = jwtTokenManager.generateRefreshToken(jwtUser);
+//
+//        cookieUtils.setCookie(res, constJwt.getRefreshTokenCookieName()
+//                    , accessToken
+//                    , constJwt.getAccessTokenCookieValiditySeconds()
+//                    , constJwt.getAccessTokenCookiePath());
+//
+//        cookieUtils.setCookie(res, constJwt.getRefreshTokenCookieName()
+//                , refreshToken
+//                , constJwt.getRefreshTokenCookieValiditySeconds()
+//                , constJwt.getRefreshTokenCookiePath());
 
         /*
             쿼리스트링 생성
